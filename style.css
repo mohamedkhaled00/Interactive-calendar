@@ -1,0 +1,381 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Global Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f4f8;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Typography */
+h1, h2, h3 {
+    font-weight: 700;
+}
+
+.text-usaidBlue {
+    color: #002F6C;
+}
+
+.text-usaidRed {
+    color: #BA0C2F;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem; /* تم تعديل الحجم */
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    font-size: 1rem; /* تم تعديل حجم الخط */
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn i {
+    transition: transform 0.3s ease;
+}
+
+.btn:hover i {
+    transform: scale(1.1);
+}
+
+.btn-usaid {
+    background-color: #002F6C;
+    color: white;
+}
+
+.btn-usaid:hover {
+    background-color: #0067B9;
+}
+
+/* Road Timeline Styles */
+.road-container {
+    position: relative;
+}
+
+/* تعديل الطريق ليكون خطًا بسيطًا */
+.road-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 10px;
+    background: #7B7B7B;
+    transform: translateX(-50%);
+    z-index: -1;
+}
+
+/* إضافة خطوط وسط الطريق */
+.road-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: repeating-linear-gradient(
+        to bottom,
+        white 0%,
+        white 10%,
+        transparent 10%,
+        transparent 20%
+    );
+    background-size: 100% 20px;
+    transform: translateX(-50%);
+    z-index: -1;
+}
+
+/* Station Card Styles */
+.station-card {
+    position: relative;
+    width: calc(50% - 40px);
+    margin: 40px 0;
+}
+
+.station-card.left {
+    left: 0;
+}
+
+.station-card.right {
+    left: 50%;
+    margin-left: 40px;
+}
+
+.station-content {
+    padding: 20px 30px;
+    background: white;
+    border-radius: 15px;
+    position: relative;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 47, 108, 0.1);
+}
+
+.station-content.locked {
+    pointer-events: none;
+    filter: grayscale(100%);
+    opacity: 0.5;
+}
+.station-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 47, 108, 0.15);
+}
+
+.station-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #002F6C, #0067B9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.station-status {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: #002F6C;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Current Station */
+.station-content.current-station {
+    border: 3px solid #002F6C;
+    animation: borderPulse 2s infinite;
+    position: relative;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 47, 108, 0.3);
+    transition: transform 0.3s;
+    background-color: rgba(0, 47, 108, 0.9);
+    color: white;
+    z-index: 1;
+}
+
+.station-content.current-station:hover {
+    transform: scale(1.05);
+}
+
+.station-content.current-station h3,
+.station-content.current-station p {
+    color: white;
+}
+
+/* Animations */
+@keyframes borderPulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 47, 108, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(0, 47, 108, 0.1); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 47, 108, 0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes dotPulse {
+    0%, 100% { transform: scale(0.3); opacity: 0.3; }
+    50% { transform: scale(1); opacity: 1; }
+}
+
+/* Welcome Screen */
+#welcomeScreen {
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}
+
+.loading-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.loading-dots span {
+    width: 12px;
+    height: 12px;
+    background-color: white;
+    border-radius: 50%;
+    animation: dotPulse 1.4s infinite ease-in-out;
+}
+
+.loading-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .station-card {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .station-card.left,
+    .station-card.right {
+        left: 50%;
+        transform: translateX(-50%);
+        margin-bottom: 60px;
+    }
+
+    .road-container::before,
+    .road-container::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #nextStationFooterBtn {
+        width: calc(100% - 20px);
+        padding: 1rem;
+        font-size: 1rem;
+    }
+}
+
+/* Additional Styles */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #002F6C, #0067B9);
+    opacity: 0.05;
+    z-index: -1;
+}
+
+.animated-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('imgs/iats-w.png') repeat;
+    opacity: 0.03;
+    animation: bgScroll 60s linear infinite;
+}
+
+@keyframes bgScroll {
+    from { background-position: 0 0; }
+    to { background-position: 100% 100%; }
+}
+
+/* Reset Button Tooltip */
+#resetTour {
+    position: relative;
+}
+
+#resetTour::after {
+    content: 'Reset Tour';
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+#resetTour:hover::after {
+    opacity: 1;
+}
+
+/* Next Station Footer */
+#nextStationFooter {
+    width: 100%;
+    text-align: center;
+}
+
+/* Additional mobile styles */
+@media (max-width: 640px) {
+    .station-card.left,
+    .station-card.right {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+
+
+
+
+
+
+
+/* Fade-in animation for welcome screen */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Fade-out animation for the screen */
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Animation for loading dots */
+@keyframes loadingAnimation {
+    0%, 50%, 100% { transform: scale(1); }
+    25% { transform: scale(1.3); }
+    75% { transform: scale(0.7); }
+}
+
+#welcomeScreen {
+    animation: fadeIn 1s ease-in-out;
+}
+
+.animate-fadeIn {
+    animation: fadeIn 1s ease-in-out;
+}
+
+.animate-logo {
+    animation: fadeIn 1.5s ease-in-out, scaleUp 2s ease-in-out;
+}
+
+@keyframes scaleUp {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+

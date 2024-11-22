@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta Tags for Responsiveness and Character Encoding -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visit Tour - Enhanced</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom Stylesheet -->
+    <link href="usaid/style.css" rel="stylesheet">
+    
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        usaidBlue: '#002F6C',
+                        usaidRed: '#BA0C2F',
+                        usaidLightBlue: '#0067B9',
+                        roadGray: '#7B7B7B',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-800 antialiased">
+<!-- Welcome Screen -->
+<div id="welcomeScreen" class="fixed inset-0 bg-gradient-to-br from-usaidBlue to-usaidLightBlue z-50 flex items-center justify-center">
+    <div class="text-center animate-fadeIn">
+        <div class="mb-8">
+            <img src="usaid/imgs/iats-w.png" alt="iATS Logo" class="mx-auto w-32 md:w-48 animate-logo">
+        </div>
+        <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">Welcome to</h1>
+        <div class="flex items-center justify-center gap-4">
+            <h2 class="text-3xl md:text-5xl font-bold text-white">Diefalla</h2>
+            <span class="text-2xl md:text-4xl text-white">-</span>
+            <h2 class="text-3xl md:text-5xl font-bold text-white">iATS</h2>
+        </div>
+        <div class="mt-8">
+            <div class="loading-dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Background Animation -->
+<div class="animated-bg"></div>
+
+<!-- Navigation Bar -->
+<nav class="bg-gradient-to-r from-usaidBlue to-usaidLightBlue text-white p-4 shadow-md fixed w-full top-0 z-40 glass-effect">
+    <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <img src="usaid/imgs/iats-w.png" alt="Logo" class="h-14">
+            <button id="resetTour" class="text-white hover:text-usaidRed transition-colors duration-300" title="Reset Tour">
+                <i class="fas fa-redo-alt text-xl"></i>
+            </button>
+        </div>
+        <h1 class="text-3xl font-bold hidden md:block">Visit Tour</h1>
+        <div class="flex items-center gap-4">
+            <button id="muteAudio" class="text-white hover:text-usaidRed transition-colors duration-300" title="Mute/Unmute Audio">
+                <i class="fas fa-volume-up text-xl"></i>
+            </button>
+            <button class="md:hidden text-2xl" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="fixed inset-0 bg-usaidBlue bg-opacity-95 z-50 hidden flex-col items-center justify-center mobile-menu">
+    <button class="absolute top-4 right-4 text-white text-2xl" id="closeMobileMenu">
+        <i class="fas fa-times"></i>
+    </button>
+    <h2 class="text-3xl font-bold text-white mb-8">Menu</h2>
+    <ul class="text-center">
+        <li class="mb-4"><a href="#" class="text-white text-xl hover:text-usaidRed transition duration-300 mobile-menu-item block py-2 px-4 rounded">Home</a></li>
+        <li class="mb-4"><a href="#" class="text-white text-xl hover:text-usaidRed transition duration-300 mobile-menu-item block py-2 px-4 rounded">About</a></li>
+        <li class="mb-4"><a href="#" class="text-white text-xl hover:text-usaidRed transition duration-300 mobile-menu-item block py-2 px-4 rounded">Contact</a></li>
+    </ul>
+</div>
+
+<!-- Main Content -->
+<div class="container mx-auto px-4 py-28">
+    <!-- Progress Bar -->
+    <div class="mb-12 glass-effect p-8 rounded-2xl">
+        <div class="relative h-6 bg-gray-200 rounded-full">
+            <div id="progress" class="bg-usaidBlue h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <p id="progressText" class="text-2xl text-usaidBlue text-center font-semibold mt-2"></p>
+    </div>
+
+    <!-- Current Station Info -->
+    <div id="currentStationInfo" class="current-station-card glass-effect rounded-2xl shadow-xl p-10 mb-12 hidden transform transition-all duration-300 bg-gradient-to-br from-white to-blue-50">
+        <div class="flex items-center mb-6">
+            <div class="bg-usaidBlue text-white rounded-full p-4 mr-5">
+                <i id="currentStationIcon" class="fas fa-3x"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-usaidBlue">Current Station: <span id="currentStationName"></span></h2>
+        </div>
+        <p id="currentStationDetails" class="text-gray-600 mb-8 text-xl leading-relaxed"></p>
+        <div class="flex justify-between items-center flex-wrap">
+            <button id="startJourney" class="btn btn-usaid">Start Journey</button>
+        </div>
+    </div>
+
+    <!-- Road Timeline -->
+    <div id="stations" class="relative road-container space-y-28 pb-16">
+        <div class="road">
+            <div class="center-line"></div>
+            <div class="border-line left"></div>
+            <div class="border-line right"></div>
+        </div>
+        <!-- Stations will be appended here via JavaScript -->
+    </div>
+
+    <!-- Tour End Message -->
+    <div id="tourEnd" class="hidden text-center py-16">
+        <h2 class="text-5xl font-bold text-usaidBlue mb-8">Tour Completed!</h2>
+        <p class="text-2xl text-gray-600 mb-10">Congratulations on completing the Interactive Tour. We hope you enjoyed the experience!</p>
+        <button id="restartTour" class="btn btn-usaid text-xl">
+            Restart Tour <i class="fas fa-redo ml-2"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Information Modal -->
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="modal-content bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+        <h2 id="modalTitle" class="text-2xl font-bold text-usaidBlue mb-4"></h2>
+        <p id="modalDetails" class="text-gray-600 mb-6"></p>
+        <button id="closeModal" class="btn btn-usaid">
+            <i class="fas fa-times mr-2"></i> Close
+        </button>
+    </div>
+</div>
+
+<!-- Reset Confirmation Modal -->
+<div id="resetConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center">
+        <h2 class="text-2xl font-bold text-usaidBlue mb-4">Reset Tour</h2>
+        <p class="text-gray-600 mb-6">Are you sure you want to reset the tour? This action cannot be undone.</p>
+        <div class="flex justify-center gap-4">
+            <button id="confirmReset" class="btn btn-usaid">
+                <i class="fas fa-check mr-2"></i> Yes, Reset
+            </button>
+            <button id="cancelReset" class="btn bg-gray-200 hover:bg-gray-300 text-gray-700">
+                <i class="fas fa-times mr-2"></i> Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Fullscreen Modal -->
+<div id="fullscreenModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center">
+        <h2 class="text-2xl font-bold text-usaidBlue mb-4">Enhanced Viewing Experience</h2>
+        <p class="text-gray-600 mb-6">For the best experience, we recommend viewing in fullscreen mode.</p>
+        <div class="flex justify-center gap-4">
+            <button id="enterFullscreen" class="btn btn-usaid">
+                <i class="fas fa-expand mr-2"></i> Enter Fullscreen
+            </button>
+            <button id="closeFullscreenModal" class="btn bg-gray-200 hover:bg-gray-300 text-gray-700">
+                <i class="fas fa-times mr-2"></i> Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Next Station Static Footer -->
+<div id="nextStationFooter" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 hidden">
+    <button id="nextStationFooterBtn" class="btn btn-usaid text-xl">
+        Next Station <i class="fas fa-arrow-right ml-2"></i>
+    </button>
+</div>
+
+<!-- Include Confetti JS for Celebration Effect -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<!-- Main JavaScript File -->
+<script src="usaid/script.js"></script>
+</body>
+</html>
